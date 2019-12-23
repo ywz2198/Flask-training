@@ -4,15 +4,26 @@ app = Flask(__name__)
 app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = '123456'
 
+@app.route('/')
+def index():
+    session.pop('name', None)
+    return '<h1>h</h1>'
+
+
 @app.route('/home', methods=['POST', 'GET'], defaults={'name' : 'default'})
 @app.route('/home/<name>', methods = ['GET','POST'])
 def home(name):
     session['name'] = name
     return '<h1>hello {}</h1> '.format(name)
 
+
 @app.route('/json')
 def json():
-    name = session['name']
+    mylist = [1,2,3,4]
+    if 'name' in session:
+        name = session['name']
+    else:
+        name = 'Notinsession'
     return jsonify({'key' : 'value', 'list' : [1,2,333], 'name' : name})
 
 @app.route('/query')
